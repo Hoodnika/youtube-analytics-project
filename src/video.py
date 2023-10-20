@@ -2,6 +2,7 @@ import json
 from googleapiclient.discovery import build
 from src.channel import Channel
 
+
 class Video:
     """
     Класс для видео из ютуба
@@ -14,11 +15,11 @@ class Video:
 
     def __init__(self, video_id: str) -> None:
         self.__video_id = video_id
-        self.__json_dict = Video.get_service().videos().list(id=self.__video_id, part='snippet,statistics').execute()
+        self.__json_dict = Video.get_service().videos().list(id=self.__video_id, part='snippet,statistics,contentDetails').execute()
         self.__title = self.__json_dict['items'][0]['snippet']['title']
-        self.__url = 'https://www.youtube.com/watch?v=' + self.__video_id
-        self.__view_count = self.__json_dict['items'][0]['statistics']['viewCount']
-        self.__likes_count = self.__json_dict['items'][0]['statistics']['likeCount']
+        self.__url = 'https://youtu.be/' + self.__video_id
+        self.__view_count = int(self.__json_dict['items'][0]['statistics']['viewCount'])
+        self.__likes_count = int(self.__json_dict['items'][0]['statistics']['likeCount'])
 
     def __str__(self):
         return self.__title
@@ -56,5 +57,3 @@ class PLVideo(Video):
     @property
     def playlist_id(self):
         return self.__playlist_id
-
-

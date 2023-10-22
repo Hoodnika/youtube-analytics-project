@@ -14,12 +14,19 @@ class Video:
         return youtube
 
     def __init__(self, video_id: str) -> None:
-        self.__video_id = video_id
-        self.__json_dict = Video.get_service().videos().list(id=self.__video_id, part='snippet,statistics,contentDetails').execute()
-        self.__title = self.__json_dict['items'][0]['snippet']['title']
-        self.__url = 'https://youtu.be/' + self.__video_id
-        self.__view_count = int(self.__json_dict['items'][0]['statistics']['viewCount'])
-        self.__likes_count = int(self.__json_dict['items'][0]['statistics']['likeCount'])
+        try:
+            self.__video_id = video_id
+            self.__json_dict = Video.get_service().videos().list(id=self.__video_id, part='snippet,statistics,contentDetails').execute()
+            self.__title = self.__json_dict['items'][0]['snippet']['title']
+            self.__url = 'https://youtu.be/' + self.__video_id
+            self.__view_count = int(self.__json_dict['items'][0]['statistics']['viewCount'])
+            self.__like_count = int(self.__json_dict['items'][0]['statistics']['likeCount'])
+        except:
+            self.__video_id = video_id
+            self.__title = None
+            self.__url = None
+            self.__view_count = None
+            self.__like_count = None
 
     def __str__(self):
         return self.__title
@@ -41,8 +48,8 @@ class Video:
         return self.__view_count
 
     @property
-    def likes_count(self):
-        return self.__likes_count
+    def like_count(self):
+        return self.__like_count
 
     def print_info(self):
         print(json.dumps(self.__json_dict, indent=2, ensure_ascii=False))

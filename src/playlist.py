@@ -55,7 +55,7 @@ class PlayList:
             video_lists.append(Video(id))
         best_video = video_lists[0]
         for video in video_lists:
-            if video.likes_count > best_video.likes_count:
+            if video.like_count > best_video.like_count:
                 best_video = video
         return best_video.url
 
